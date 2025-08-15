@@ -1,0 +1,253 @@
+.header {
+  background: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+}
+
+.logo {
+  text-decoration: none;
+  color: #333;
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+.nav {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.2s ease;
+  position: relative;
+}
+
+.nav-link:hover {
+  color: #666;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #ffffff;
+  transition: width 0.2s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Social Media Icons */
+.social-icons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #333;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 2px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.social-icon:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.social-icon.instagram {
+  color: #e4405f;
+  border-color: #e4405f;
+}
+
+.social-icon.instagram:hover {
+  background: #e4405f;
+  color: white;
+}
+
+.social-icon.tiktok {
+  color: #000000;
+  border-color: #000000;
+}
+
+.social-icon.tiktok:hover {
+  background: #000000;
+  color: white;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.cart-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  transition: background 0.2s ease;
+  text-decoration: none;
+  color: #333;
+}
+
+.cart-icon:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ffffff;
+  color: #333;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 18px;
+  text-align: center;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-name {
+  font-weight: 500;
+  color: #333;
+}
+
+.admin-link {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  transition: background 0.2s ease;
+}
+
+.admin-link:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.menu-toggle span {
+  width: 25px;
+  height: 3px;
+  background: #333;
+  margin: 3px 0;
+  transition: 0.3s;
+}
+
+/* Mobile Menu */
+@media (max-width: 768px) {
+  .nav {
+    position: fixed;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #ffffff;
+    flex-direction: column;
+    padding: 2rem;
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .nav.nav-open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .nav-link::after {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: flex;
+  }
+
+  .social-icons {
+    display: none;
+  }
+
+  .user-menu {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .auth-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-content {
+    padding: 0.5rem 0;
+  }
+
+  .logo h1 {
+    font-size: 1.8rem;
+  }
+
+  .social-icon {
+    width: 50px;
+    height: 50px;
+  }
+} 

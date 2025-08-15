@@ -1,0 +1,197 @@
+.policies-page {
+  padding: 2rem 0;
+  background: #ffffff;
+  min-height: 100vh;
+}
+
+/* Hero Section */
+.policies-hero {
+  text-align: center;
+  padding: 4rem 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  border-radius: 12px;
+  margin-bottom: 4rem;
+}
+
+.policies-hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.policies-hero p {
+  font-size: 1.2rem;
+  color: #666;
+}
+
+/* Policy Sections */
+.policy-section {
+  margin-bottom: 4rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.policy-content {
+  padding: 3rem;
+}
+
+.policy-text h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+  border-bottom: 2px solid #d8c6b1;
+  padding-bottom: 0.5rem;
+}
+
+.policy-text h3 {
+  font-size: 1.5rem;
+  margin: 2rem 0 1rem 0;
+  color: #333;
+}
+
+.policy-text p {
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.policy-text ul,
+.policy-text ol {
+  margin: 1rem 0 1.5rem 2rem;
+}
+
+.policy-text li {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
+
+.policy-text strong {
+  color: #333;
+  font-weight: 600;
+}
+
+/* Size Chart Table */
+.size-chart {
+  margin: 2rem 0;
+  overflow-x: auto;
+}
+
+.size-chart table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.size-chart th {
+  background: #d8c6b1;
+  color: #333;
+  font-weight: 600;
+  padding: 1rem;
+  text-align: center;
+  border-bottom: 2px solid #c4b3a0;
+}
+
+.size-chart td {
+  padding: 1rem;
+  text-align: center;
+  border-bottom: 1px solid #f0f0f0;
+  color: #666;
+}
+
+.size-chart tr:hover {
+  background: #f8f8f8;
+}
+
+.size-chart tr:last-child td {
+  border-bottom: none;
+}
+
+/* Contact Info */
+.contact-info {
+  background: #f8f8f8;
+  padding: 2rem;
+  border-radius: 8px;
+  margin-top: 1.5rem;
+}
+
+.contact-info p {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: #666;
+}
+
+.contact-info strong {
+  color: #333;
+  font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .policies-hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .policy-content {
+    padding: 2rem;
+  }
+
+  .policy-text h2 {
+    font-size: 2rem;
+  }
+
+  .policy-text h3 {
+    font-size: 1.3rem;
+  }
+
+  .size-chart {
+    font-size: 0.9rem;
+  }
+
+  .size-chart th,
+  .size-chart td {
+    padding: 0.75rem 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .policies-page {
+    padding: 1rem 0;
+  }
+
+  .policies-hero {
+    padding: 2rem 0;
+  }
+
+  .policies-hero h1 {
+    font-size: 2rem;
+  }
+
+  .policy-content {
+    padding: 1.5rem;
+  }
+
+  .policy-text h2 {
+    font-size: 1.8rem;
+  }
+
+  .policy-text h3 {
+    font-size: 1.2rem;
+  }
+
+  .policy-text ul,
+  .policy-text ol {
+    margin-left: 1rem;
+  }
+
+  .contact-info {
+    padding: 1.5rem;
+  }
+} 

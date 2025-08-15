@@ -1,0 +1,28 @@
+{
+  "name": "modera-nada-ecommerce",
+  "version": "1.0.0",
+  "description": "Fullstack e-commerce website for Modera Nada clothing brand",
+  "scripts": {
+    "dev": "concurrently \"npm start --prefix frontend\" \"npm start --prefix backend\"",
+    "install:all": "npm install && npm install --prefix frontend && npm install --prefix backend",
+    "build": "npm run build --prefix frontend",
+    "start:backend": "npm start --prefix backend",
+    "start:frontend": "npm start --prefix frontend",
+    "dev:backend": "npm start --prefix backend",
+    "dev:frontend": "npm start --prefix frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "keywords": [
+    "ecommerce",
+    "react",
+    "nodejs",
+    "express",
+    "mongodb",
+    "fashion",
+    "clothing"
+  ],
+  "author": "Modera Nada",
+  "license": "MIT"
+} 
