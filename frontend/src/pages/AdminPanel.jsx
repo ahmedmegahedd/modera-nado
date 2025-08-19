@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import AdminProductForm from '../components/AdminProductForm';
+import CollectionForm from '../components/CollectionForm';
 import './AdminPanel.css';
 
 const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState('products');
   const [products, setProducts] = useState([]);
+  const [collections, setCollections] = useState([]);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showProductForm, setShowProductForm] = useState(false);
+  const [showCollectionForm, setShowCollectionForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [editingCollection, setEditingCollection] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -17,8 +21,9 @@ const AdminPanel = () => {
 
   const fetchData = async () => {
     try {
-      const [productsRes, ordersRes] = await Promise.all([
+      const [productsRes, collectionsRes, ordersRes] = await Promise.all([
         fetch('/api/products'),
+        fetch('/api/collections'),
         fetch('/api/orders/all', {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -29,6 +34,11 @@ const AdminPanel = () => {
       if (productsRes.ok) {
         const productsData = await productsRes.json();
         setProducts(productsData);
+      }
+
+      if (collectionsRes.ok) {
+        const collectionsData = await collectionsRes.json();
+        setCollections(collectionsData);
       }
 
       if (ordersRes.ok) {
@@ -53,6 +63,47 @@ const AdminPanel = () => {
     setShowProductForm(false);
     setEditingProduct(null);
     setError('');
+  };
+
+  const handleCollectionSubmit = async (savedCollection) => {
+    setShowCollectionForm(false);
+    setEditingCollection(null);
+    setError('');
+    await fetchData();
+  };
+
+  const handleCollectionCancel = () => {
+    setShowCollectionForm(false);
+    setEditingCollection(null);
+    setError('');
+  };
+
+  const handleDeleteCollection = async (collectionId) => {
+    if (!window.confirm('Are you sure you want to delete this collection?')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/collections/${collectionId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      if (response.ok) {
+        fetchData();
+      } else {
+        setError('Failed to delete collection');
+      }
+    } catch (error) {
+      setError('Network error');
+    }
+  };
+
+  const handleEditCollection = (collection) => {
+    setEditingCollection(collection);
+    setShowCollectionForm(true);
   };
 
   const handleDeleteProduct = async (productId) => {
@@ -105,11 +156,11 @@ const AdminPanel = () => {
   };
 
   const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(price);
-  };
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'EGP'
+  }).format(price);
+};
 
   if (loading) {
     return (
@@ -139,6 +190,12 @@ const AdminPanel = () => {
             onClick={() => setActiveTab('products')}
           >
             Products
+          </button>
+          <button
+            className={`tab-btn ${activeTab === 'collections' ? 'active' : ''}`}
+            onClick={() => setActiveTab('collections')}
+          >
+            Collections
           </button>
           <button
             className={`tab-btn ${activeTab === 'orders' ? 'active' : ''}`}
@@ -201,6 +258,70 @@ const AdminPanel = () => {
                         <button
                           className="btn btn-secondary"
                           onClick={() => handleDeleteProduct(product._id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'collections' && (
+          <div className="collections-section">
+            <div className="section-header">
+              <h2>Manage Collections</h2>
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  setEditingCollection(null);
+                  setShowCollectionForm(true);
+                }}
+              >
+                Add New Collection
+              </button>
+            </div>
+
+            {/* Collection Form */}
+            {showCollectionForm && (
+              <div className="collection-form-container">
+                <CollectionForm
+                  collection={editingCollection}
+                  onSubmit={handleCollectionSubmit}
+                  onCancel={handleCollectionCancel}
+                />
+              </div>
+            )}
+
+            {/* Collections List */}
+            <div className="collections-list">
+              <h3>All Collections</h3>
+              <div className="collections-grid">
+                {collections.map(collection => (
+                  <div key={collection._id} className="collection-card">
+                    <div className="collection-image">
+                      {collection.image ? (
+                        <img src={collection.image} alt={collection.name} />
+                      ) : (
+                        <div className="image-placeholder">No Image</div>
+                      )}
+                    </div>
+                    <div className="collection-info">
+                      <h4>{collection.name}</h4>
+                      <p>{collection.description}</p>
+                      <div className="collection-actions">
+                        <button
+                          className="btn btn-secondary"
+                          onClick={() => handleEditCollection(collection)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="btn btn-secondary"
+                          onClick={() => handleDeleteCollection(collection._id)}
                         >
                           Delete
                         </button>

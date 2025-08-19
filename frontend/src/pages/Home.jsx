@@ -1,26 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
+import { useAuth } from '../context/AuthContext';
 import './Home.css';
 
 const Home = () => {
+  const { isAdmin } = useAuth();
   const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [collections, setCollections] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchFeaturedProducts = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch('/api/products?featured=true&limit=6');
-        const data = await response.json();
-        setFeaturedProducts(data);
+        const [productsRes, collectionsRes] = await Promise.all([
+          fetch('/api/products?featured=true&limit=6'),
+          fetch('/api/collections')
+        ]);
+        
+        const productsData = await productsRes.json();
+        const collectionsData = await collectionsRes.json();
+        
+        setFeaturedProducts(productsData);
+        setCollections(collectionsData);
       } catch (error) {
-        console.error('Error fetching featured products:', error);
+        console.error('Error fetching data:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchFeaturedProducts();
+    fetchData();
   }, []);
 
   return (
@@ -37,9 +47,6 @@ const Home = () => {
             <div className="hero-buttons">
               <Link to="/shop" className="btn btn-primary btn-large">
                 Shop Now
-              </Link>
-              <Link to="/policies" className="btn btn-secondary btn-large">
-                Learn More
               </Link>
             </div>
           </div>
@@ -74,39 +81,41 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Categories Section */}
-      <section className="categories-section">
+      {/* Collections Section */}
+      <section className="collections-section">
         <div className="container">
           <div className="section-header">
-            <h2>Shop by Category</h2>
-            <p>Explore our diverse range of clothing categories</p>
+            <h2>Our Collections</h2>
+            <p>Discover our carefully curated fashion collections</p>
           </div>
 
-          <div className="categories-grid">
-            <Link to="/shop?category=Tops" className="category-card">
-              <div className="category-image">
-                <div className="category-placeholder">Tops</div>
+          <div className="collections-grid">
+            {collections.map(collection => (
+              <Link key={collection._id} to={`/shop?collection=${encodeURIComponent(collection.name)}`} className="collection-card">
+                <div className="collection-image">
+                  {collection.image ? (
+                    <img src={collection.image} alt={collection.name} />
+                  ) : (
+                    <div className="collection-placeholder">{collection.name}</div>
+                  )}
+                </div>
+                <h3>{collection.name}</h3>
+                <p>{collection.description}</p>
+              </Link>
+            ))}
+            
+            {isAdmin && (
+              <div className="collection-card add-collection">
+                <div className="collection-image">
+                  <div className="collection-placeholder add-icon">+</div>
+                </div>
+                <h3>Add New Collection</h3>
+                <p>Create a new collection to showcase your latest designs</p>
+                <button className="btn btn-secondary" onClick={() => window.location.href = '/admin'}>
+                  Create Collection
+                </button>
               </div>
-              <h3>Tops</h3>
-            </Link>
-            <Link to="/shop?category=Bottoms" className="category-card">
-              <div className="category-image">
-                <div className="category-placeholder">Bottoms</div>
-              </div>
-              <h3>Bottoms</h3>
-            </Link>
-            <Link to="/shop?category=Dresses" className="category-card">
-              <div className="category-image">
-                <div className="category-placeholder">Dresses</div>
-              </div>
-              <h3>Dresses</h3>
-            </Link>
-            <Link to="/shop?category=Outerwear" className="category-card">
-              <div className="category-image">
-                <div className="category-placeholder">Outerwear</div>
-              </div>
-              <h3>Outerwear</h3>
-            </Link>
+            )}
           </div>
         </div>
       </section>
@@ -119,9 +128,6 @@ const Home = () => {
               <h2>Store Policies</h2>
               <p>We believe in creating clothing that speaks to the modern individual. Our designs combine contemporary aesthetics with timeless elegance, ensuring that each piece is not just fashionable but also comfortable and durable.</p>
               <p>From our carefully selected fabrics to our attention to detail in every stitch, we strive to deliver quality that exceeds expectations.</p>
-              <Link to="/policies" className="btn btn-primary">
-                View Our Policies
-              </Link>
             </div>
             <div className="about-image">
               <div className="about-placeholder">Our Story</div>

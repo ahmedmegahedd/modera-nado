@@ -7,11 +7,11 @@ const ProductCard = ({ product, onDelete }) => {
   const { isAdmin } = useAuth();
   
   const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(price);
-  };
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'EGP'
+  }).format(price);
+};
 
   const handleDelete = (e) => {
     e.preventDefault();

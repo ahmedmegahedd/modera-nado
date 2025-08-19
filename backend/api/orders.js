@@ -2,7 +2,8 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 const Order = require('../models/Order');
 const Product = require('../models/Product');
-const { auth, adminAuth } = require('../middleware/auth');
+const { auth, adminAuth, optionalAuth } = require('../middleware/auth');
+const { sendOrderNotification, sendOrderConfirmation } = require('../services/emailService');
 
 const router = express.Router();
 
@@ -35,8 +36,8 @@ router.get('/all', adminAuth, async (req, res) => {
   }
 });
 
-// Create order
-router.post('/', auth, [
+// Create order (guest checkout allowed)
+router.post('/', optionalAuth, [
   body('items').isArray().withMessage('Items must be an array'),
   body('items.*.product').isMongoId().withMessage('Invalid product ID'),
   body('items.*.size').isIn(['XS', 'S', 'M', 'L', 'XL', 'XXL']).withMessage('Invalid size'),
@@ -83,7 +84,7 @@ router.post('/', auth, [
 
     // Create order
     const order = new Order({
-      user: req.user._id,
+      user: req.user?._id || null, // Allow guest orders
       items: orderItems,
       total,
       shippingAddress,
@@ -103,6 +104,18 @@ router.post('/', auth, [
 
     const populatedOrder = await Order.findById(order._id)
       .populate('items.product');
+
+    // Send email notifications
+    try {
+      // Send notification to admin
+      await sendOrderNotification(populatedOrder);
+      
+      // Send confirmation to customer
+      await sendOrderConfirmation(populatedOrder);
+    } catch (emailError) {
+      console.error('Failed to send order emails:', emailError);
+      // Don't fail the order creation if email fails
+    }
 
     res.status(201).json(populatedOrder);
   } catch (error) {

@@ -8,12 +8,12 @@ require('dotenv').config();
 
 const app = express();
 
+// Trust proxy for rate limiting
+app.set('trust proxy', 1);
+
 // Middleware
 app.use(helmet());
-app.use(cors({
-  origin: 'https://modera-nado.vercel.app',
-  credentials: true
-}));
+app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
@@ -66,17 +66,17 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Routes
 app.use('/api/auth', require('./api/auth'));
 app.use('/api/products', require('./api/products'));
+app.use('/api/collections', require('./api/collections'));
 app.use('/api/orders', require('./api/orders'));
-app.use('/api/inquiries', require('./api/inquiries'));
 
 // Serve static files in production
-// if (process.env.NODE_ENV === 'production') {
-//   app.use(express.static(path.join(__dirname, 'build')));
-//   
-//   app.get('*', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'build', 'index.html'));
-//   });
-// }
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'build')));
+  
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  });
+}
 
 const PORT = process.env.PORT || 3453;
 app.listen(PORT, () => {

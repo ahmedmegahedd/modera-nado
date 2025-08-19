@@ -7,6 +7,7 @@ const AdminProductForm = ({ product, onSubmit, onCancel }) => {
     description: '',
     price: '',
     category: '',
+    collection: 'Summer Collection',
     color: '',
     sizes: [],
     features: [],
@@ -30,6 +31,7 @@ const AdminProductForm = ({ product, onSubmit, onCancel }) => {
         description: product.description || '',
         price: product.price || '',
         category: product.category || '',
+        collection: product.collection || 'Summer Collection',
         color: product.color || '',
         sizes: product.sizes || [],
         features: product.features || [],
@@ -154,6 +156,7 @@ const AdminProductForm = ({ product, onSubmit, onCancel }) => {
       formDataToSend.append('description', formData.description);
       formDataToSend.append('price', formData.price);
       formDataToSend.append('category', formData.category);
+      formDataToSend.append('collection', formData.collection);
       formDataToSend.append('color', formData.color);
       formDataToSend.append('sizes', JSON.stringify(formData.sizes));
       formDataToSend.append('features', JSON.stringify(formData.features));
@@ -290,6 +293,21 @@ const AdminProductForm = ({ product, onSubmit, onCancel }) => {
               </select>
             </div>
 
+            <div className="form-group">
+              <label htmlFor="collection">Collection *</label>
+              <input
+                type="text"
+                id="collection"
+                name="collection"
+                value={formData.collection}
+                onChange={handleInputChange}
+                placeholder="e.g., Summer Collection"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="form-row">
             <div className="form-group checkbox-group">
               <label>
                 <input

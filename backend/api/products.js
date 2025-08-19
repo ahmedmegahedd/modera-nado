@@ -36,12 +36,16 @@ const upload = multer({
 // Get all products (public)
 router.get('/', async (req, res) => {
   try {
-    const { category, search, featured, sort = 'createdAt', order = 'desc' } = req.query;
+    const { category, collection, search, featured, sort = 'createdAt', order = 'desc' } = req.query;
     
     let query = {};
     
     if (category) {
       query.category = category;
+    }
+    
+    if (collection) {
+      query.collection = collection;
     }
     
     if (search) {
@@ -97,7 +101,7 @@ router.post('/', adminAuth, upload.fields([
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, description, price, category, sizes, featured, color, features } = req.body;
+    const { name, description, price, category, collection, sizes, featured, color, features } = req.body;
     
     // Process uploaded images
     const images = req.files && req.files.images ? req.files.images.map(file => `/uploads/${file.filename}`) : [];
@@ -121,6 +125,7 @@ router.post('/', adminAuth, upload.fields([
       modelImages,
       sizes: JSON.parse(sizes),
       category,
+      collection: collection || 'Summer Collection',
       price: parseFloat(price),
       color,
       stock,
@@ -157,7 +162,7 @@ router.put('/:id', adminAuth, upload.fields([
       return res.status(404).json({ message: 'Product not found' });
     }
 
-    const { name, description, price, category, sizes, featured, color, features, stock } = req.body;
+    const { name, description, price, category, collection, sizes, featured, color, features, stock } = req.body;
     
     // Handle new images if uploaded
     let images = product.images;
@@ -181,6 +186,7 @@ router.put('/:id', adminAuth, upload.fields([
     product.features = featuresArray;
     product.price = parseFloat(price);
     product.category = category;
+    product.collection = collection || 'Summer Collection';
     product.color = color;
     product.images = images;
     product.modelImages = modelImages;

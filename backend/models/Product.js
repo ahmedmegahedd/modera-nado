@@ -43,6 +43,12 @@ const productSchema = new mongoose.Schema({
     required: true,
     enum: ['Tops', 'Bottoms', 'Dresses', 'Outerwear', 'Accessories']
   },
+  collection: {
+    type: String,
+    required: true,
+    default: 'Summer Collection',
+    trim: true
+  },
   price: {
     type: Number,
     required: true,

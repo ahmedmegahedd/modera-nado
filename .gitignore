@@ -97,4 +97,4 @@ backend/uploads/*
 
 # Environment files
 frontend/.env
-backend/.env 
+backend/.env .env

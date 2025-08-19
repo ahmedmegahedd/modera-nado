@@ -20,6 +20,7 @@ A modern, elegant e-commerce platform for clothing with admin panel and image ma
   - **File Validation**: Supports JPG, PNG, WebP formats (5MB max)
 - **Order Management**: Track and update order statuses
 - **Inventory Control**: Manage product sizes and stock levels
+- **Email Notifications**: Automatic order notifications sent to nadodbusiness@gmail.com
 
 ## Image Upload System
 
@@ -55,6 +56,7 @@ A modern, elegant e-commerce platform for clothing with admin panel and image ma
 - **Multer**: File upload handling
 - **JWT**: Authentication system
 - **Express Validator**: Input validation
+- **Nodemailer**: Email notifications for orders
 
 ## Setup Instructions
 
@@ -62,6 +64,8 @@ A modern, elegant e-commerce platform for clothing with admin panel and image ma
 ```bash
 cd backend
 npm install
+cp env.example .env
+# Edit .env with your email credentials (see EMAIL_SETUP_GUIDE.md)
 npm start
 ```
 
@@ -150,6 +154,18 @@ Same fields as create, new images are appended to existing ones
 - **Rate Limiting**: API request throttling
 - **Input Sanitization**: Express validator protection
 
+## Email Notifications
+
+The system automatically sends detailed email notifications to `nadodbusiness@gmail.com` when new orders are placed. Each email includes:
+
+- Customer information (name, email, phone)
+- Complete order details with products and prices
+- Delivery address
+- Order ID and timestamp
+- Professional HTML formatting
+
+See `EMAIL_SETUP_GUIDE.md` for detailed setup instructions.
+
 ## Future Enhancements
 
 - [ ] Image compression and optimization
@@ -157,4 +173,6 @@ Same fields as create, new images are appended to existing ones
 - [ ] Image cropping and editing tools
 - [ ] Bulk image upload
 - [ ] Image alt text management
-- [ ] CDN integration for faster loading 
+- [ ] CDN integration for faster loading
+- [ ] Customer order confirmation emails
+- [ ] Order status update notifications 

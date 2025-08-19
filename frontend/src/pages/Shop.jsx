@@ -11,30 +11,38 @@ const Shop = () => {
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     category: searchParams.get('category') || '',
+    collection: searchParams.get('collection') || '',
     sort: searchParams.get('sort') || 'createdAt',
     order: searchParams.get('order') || 'desc'
   });
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchData = async () => {
       setLoading(true);
       try {
-        const params = new URLSearchParams();
-        if (filters.category) params.append('category', filters.category);
-        if (filters.sort) params.append('sort', filters.sort);
-        if (filters.order) params.append('order', filters.order);
-
-        const response = await fetch(`/api/products?${params.toString()}`);
-        const data = await response.json();
-        setProducts(data);
+        const [productsRes, collectionsRes] = await Promise.all([
+          fetch(`/api/products?${new URLSearchParams({
+            ...(filters.category && { category: filters.category }),
+            ...(filters.collection && { collection: filters.collection }),
+            ...(filters.sort && { sort: filters.sort }),
+            ...(filters.order && { order: filters.order })
+          }).toString()}`),
+          fetch('/api/collections')
+        ]);
+        
+        const productsData = await productsRes.json();
+        const collectionsData = await collectionsRes.json();
+        
+        setProducts(productsData);
+        setCollections(collectionsData);
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('Error fetching data:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProducts();
+    fetchData();
   }, [filters]);
 
   const handleDelete = async (productId) => {
@@ -75,12 +83,14 @@ const Shop = () => {
   const clearFilters = () => {
     setFilters({
       category: '',
+      collection: '',
       sort: 'createdAt',
       order: 'desc'
     });
     setSearchParams({});
   };
 
+  const [collections, setCollections] = useState([]);
   const categories = ['Tops', 'Bottoms', 'Dresses', 'Outerwear', 'Accessories'];
   const sortOptions = [
     { value: 'createdAt', label: 'Newest' },
@@ -113,6 +123,23 @@ const Shop = () => {
                 <option value="">All Categories</option>
                 {categories.map(category => (
                   <option key={category} value={category}>{category}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="filter-group">
+              <label htmlFor="collection" className="filter-label">Collection</label>
+              <select
+                id="collection"
+                className="form-select"
+                value={filters.collection}
+                onChange={(e) => handleFilterChange('collection', e.target.value)}
+              >
+                <option value="">All Collections</option>
+                {collections.map(collection => (
+                  <option key={collection._id} value={collection.name}>
+                    {collection.name}
+                  </option>
                 ))}
               </select>
             </div>

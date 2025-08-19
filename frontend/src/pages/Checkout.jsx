@@ -27,11 +27,11 @@ const Checkout = () => {
   const [error, setError] = useState('');
 
   const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(price);
-  };
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'EGP'
+  }).format(price);
+};
 
   const handleChange = (section, field, value) => {
     setFormData(prev => ({
@@ -46,11 +46,6 @@ const Checkout = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!isAuthenticated) {
-      navigate('/login', { state: { from: '/checkout' } });
-      return;
-    }
-
     if (cart.length === 0) {
       navigate('/cart');
       return;
@@ -70,12 +65,19 @@ const Checkout = () => {
         contactInfo: formData.contactInfo
       };
 
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+      
+      // Add auth token if user is logged in
+      const token = localStorage.getItem('token');
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const response = await fetch('/api/orders', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
+        headers,
         body: JSON.stringify(orderData)
       });
 
